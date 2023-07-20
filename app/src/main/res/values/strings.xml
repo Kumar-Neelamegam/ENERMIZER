@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Enermizer</string>
+    <string name="socket_1">Socket 1</string>
+    <string name="btn_label_on">ON</string>
+    <string name="btn_label_off">OFF</string>
+    <string name="socket_2">Socket 2</string>
+    <string name="label_auto">AUTO</string>
+    <string name="socket_3">Socket 3</string>
+    <string name="socket_4">Socket 4</string>
 </resources>
