@@ -1,34 +1,27 @@
 package com.peter.enermizer.services
 
-import okhttp3.Callback
-import okhttp3.RequestBody
 import okhttp3.Response
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
 
-private val BASE_URL = ""
+private val BASE_URL = "http://192.168.1.166/api/"
 
 interface RaspberryAPIService {
-    @GET("/api/bulbon")
-    suspend fun getBulbOnStatus(): Response
+    @GET("bulbon")
+    fun getBulbOn(): Call<RaspberryPiResponse>
 
-    @GET("/api/bulboff")
-    suspend fun getBulbOffStatus(): Response
-
-    @Headers("Content-Type: application/json")
-    @POST("endpoint")
-    fun sendData(@Body requestBody: RequestBody): Call<ResponseBody>
+    @GET("bulboff")
+    fun getBulbOff(): Call<RaspberryPiResponse>
 }
 
-val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-val apiService = retrofit.create(RaspberryAPIService::class.java)
+object RetrofitInstance {
+    val apiInstance : RaspberryAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RaspberryAPIService::class.java)
+    }
+}
