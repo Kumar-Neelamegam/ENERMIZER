@@ -18,7 +18,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initialize()
+        controllerListeners()
+    }
+
+    fun initialize() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+
+        tempCallToBulbOn()
+    }
+
+    fun controllerListeners() {
+
+    }
+
+    fun tempCallToBulbOn() {
         viewModel.callBulbOnService()
         viewModel.observeResponseLiveData().observe(this, Observer { response ->
             Log.e(TAG, response.toString())

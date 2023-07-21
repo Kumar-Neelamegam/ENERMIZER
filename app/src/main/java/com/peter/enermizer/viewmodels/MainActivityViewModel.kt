@@ -33,6 +33,26 @@ class MainActivityViewModel : ViewModel() {
 
     }
 
+    fun callBulbOffService() {
+        RetrofitInstance.apiInstance.getBulbOff().enqueue(object : Callback<RaspberryPiResponse> {
+            override fun onResponse(
+                call: Call<RaspberryPiResponse>,
+                response: Response<RaspberryPiResponse>
+            ) {
+                if (response.body() != null) {
+                    raspberryPiResponse.value = response.body()!!
+                } else {
+                    return
+                }
+            }
+
+            override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
+                Log.d("TAG", t.message.toString())
+            }
+        })
+
+    }
+
     fun observeResponseLiveData(): LiveData<RaspberryPiResponse> {
         return raspberryPiResponse
     }
