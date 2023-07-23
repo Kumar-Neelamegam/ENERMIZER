@@ -22,22 +22,35 @@ class MainActivity : AppCompatActivity() {
         controllerListeners()
     }
 
-    fun initialize() {
+    private fun initialize() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
-        tempCallToBulbOn()
     }
 
-    fun controllerListeners() {
+    private fun controllerListeners() {
+        binding.btnOn.setOnClickListener {
+            tempCallToBulbOn()
+        }
 
+        binding.btnOff.setOnClickListener {
+            tempCallToBulbOff()
+        }
     }
 
     fun tempCallToBulbOn() {
         viewModel.callBulbOnService()
         viewModel.observeResponseLiveData().observe(this, Observer { response ->
-            Log.e(TAG, response.toString())
+            Log.e(TAG, "Response from BulbOn")
             Log.e(TAG, response.toString())
             Log.e(TAG, response.toString())
         })
+    }
+    fun tempCallToBulbOff() {
+        viewModel.callBulbOffService()
+        viewModel.observeResponseLiveData().observe(this) { response ->
+            Log.e(TAG, "Response from BulbOff")
+            Log.e(TAG, response.toString())
+            Log.e(TAG, response.toString())
+        }
     }
 }
