@@ -1,12 +1,13 @@
 package com.peter.enermizer.services
 
+import com.peter.enermizer.BuildConfig.ServiceIPAddress
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.GET
 
-private val BASE_URL = "http://192.168.0.4:8080/api/"
+private val BASE_URL = "http://$ServiceIPAddress/api/"
 
 interface RaspberryAPIService {
     @GET("bulbon")

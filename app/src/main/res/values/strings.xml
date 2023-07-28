@@ -1,5 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <resources>
     <string name="app_name">Enermizer</string>
+
+    <!-- Home activity strings -->
     <string name="socket_1">Socket 1</string>
     <string name="btn_label_on">ON</string>
     <string name="btn_label_off">OFF</string>
@@ -7,4 +21,10 @@
     <string name="label_auto">AUTO</string>
     <string name="socket_3">Socket 3</string>
     <string name="socket_4">Socket 4</string>
+
+    <!-- Menu strings -->
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_reports">Reports</string>
+    <string name="title_settings">Settings</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.peter.enermizer.viewmodels
+package com.peter.enermizer.views.dashboard
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,7 +10,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivityViewModel : ViewModel() {
+class DashboardViewModel : ViewModel() {
+
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is dashboard Fragment"
+    }
+    val text: LiveData<String> = _text
+
     private var raspberryPiResponse = MutableLiveData<RaspberryPiResponse>()
 
     fun callBulbOnService() {
@@ -58,5 +64,3 @@ class MainActivityViewModel : ViewModel() {
     }
 
 }
-
-
