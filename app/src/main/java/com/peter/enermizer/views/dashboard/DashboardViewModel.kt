@@ -12,10 +12,12 @@ import retrofit2.Response
 
 class DashboardViewModel : ViewModel() {
 
+/*
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
     val text: LiveData<String> = _text
+*/
 
     private var raspberryPiResponse = MutableLiveData<RaspberryPiResponse>()
 
@@ -61,6 +63,19 @@ class DashboardViewModel : ViewModel() {
 
     fun observeResponseLiveData(): LiveData<RaspberryPiResponse> {
         return raspberryPiResponse
+    }
+
+    //TODO check the raspberry pi connection and return the boolean status
+    fun checkRaspberryPiConnection():Boolean {
+        return false
+    }
+
+    fun checkInternetConnection():Boolean {
+        return false
+    }
+
+    fun checkSocketIsActive(socketNumber: Int):Boolean {
+        return false
     }
 
 }

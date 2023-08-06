@@ -27,4 +27,18 @@
     <string name="title_reports">Reports</string>
     <string name="title_settings">Settings</string>
 
+    <!-- Reports -->
+    <string name="report1">Energy consumed over period of time</string>
+    <string name="report2">Costs of energy consumed</string>
+        <string name="report2_subtitle">(Sum of all hourly Energy consumed x Awattar price)</string>
+    <string name="report3">Average effective price</string>
+        <string name="report3_subtitle">(Costs of energy consumed over period divided by Energy consumed over period)</string>
+    <string name="report4">Average Awattar price over period</string>
+    <string name="report5">Savings</string>
+        <string name="report5_subtitle">Costs of energy consumed minus Sum of all hourly Energy consumed x Average Awattar price</string>
+
+    <string name="label_selected_date_range">Selected Date: %1$S</string>
+    <string name="label_select_date">Select Date</string>
+
+
 </resources>

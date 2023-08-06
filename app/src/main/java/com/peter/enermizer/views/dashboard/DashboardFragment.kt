@@ -53,6 +53,26 @@ class DashboardFragment : Fragment() {
     }
 
     private fun initialize() {
+        changeInternetStatus(dashboardViewModel.checkInternetConnection())
+        changeRaspberryPiStatus(dashboardViewModel.checkRaspberryPiConnection())
+        changeSocket1Status(dashboardViewModel.checkSocketIsActive(1))
+        changeSocket2Status(dashboardViewModel.checkSocketIsActive(2))
+    }
+
+    private fun changeSocket2Status(checkSocketIsActive: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    private fun changeSocket1Status(checkSocketIsActive: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    private fun changeRaspberryPiStatus(checkRaspberryPiConnection: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    private fun changeInternetStatus(checkInternetConnection: Boolean) {
+        TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {
