@@ -1,13 +1,13 @@
 package com.peter.enermizer.views.reports
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.core.util.Pair
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentReportsBinding
@@ -17,6 +17,7 @@ import java.util.Locale
 
 class ReportsFragment : Fragment() {
 
+    private var TAG = "ReportsFragment"
     private var _binding: FragmentReportsBinding? = null
 
     // This property is only valid between onCreateView and
@@ -43,11 +44,11 @@ class ReportsFragment : Fragment() {
 
     private fun controllisteners() {
         binding.datePicker.setOnClickListener {
-            datePickerdialog()
+            datePickerDialog()
         }
     }
 
-    private fun datePickerdialog() {
+    private fun datePickerDialog() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
@@ -60,7 +61,8 @@ class ReportsFragment : Fragment() {
             val endDate = selection.second
 
             // Formatting the selected dates as strings
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            // 2023-07-25 15:00:00
+            val sdf = SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault())
             val startDateString = sdf.format(Date(startDate))
             val endDateString = sdf.format(Date(endDate))
 
@@ -69,20 +71,24 @@ class ReportsFragment : Fragment() {
 
             // Displaying the selected date range in the TextView
             binding.selectedDate.text = resources.getString(R.string.label_selected_date_range, selectedDateRange)
-
-            updateReportsWithValues(reportsViewModel.getReportsBasedOnDates(startDateString, endDateString))
+            reportsViewModel.getReportsBasedOnDates(startDateString, endDateString)
+            updateReportsWithValues()
         }
 
         // Showing the date picker dialog
         datePicker.show(parentFragmentManager, "DATE_PICKER")
     }
 
-    private fun updateReportsWithValues(reportsBasedOnDates: List<String>) {
-        binding.valueReport1.text = "100"
-        binding.valueReport2.text = "200"
-        binding.valueReport3.text = "300"
-        binding.valueReport4.text = "500"
-        binding.valueReport5.text = "600"
+    private fun updateReportsWithValues() {
+        reportsViewModel.observeResponseLiveData().observe(viewLifecycleOwner) { response ->
+            Log.e(TAG, "Response from getReportsBasedOnDates")
+            Log.e(TAG, response.toString())
+        }
+        //binding.valueReport1.text = "100"
+        //binding.valueReport2.text = "200"
+        //binding.valueReport3.text = "300"
+        //binding.valueReport4.text = "500"
+        //binding.valueReport5.text = "600"
     }
 
     override fun onDestroyView() {

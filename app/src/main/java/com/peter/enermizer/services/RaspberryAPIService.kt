@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 private val BASE_URL = "http://$ServiceIPAddress/api/"
 
@@ -18,6 +19,9 @@ interface RaspberryAPIService {
 
     @GET("socketcontroller")
     fun getSocketController(@Field("switchNumber") switchNumber: Int, @Field("switchStatus") switchStatus:Int): Call<RaspberryPiResponse>
+
+    @POST("report4")
+    fun averageAwattarPriceOverPeriod(@Field("fromDate") fromDate: String, @Field("toDate") toDate: String): Call<RaspberryPiResponse>
 
 
 }
