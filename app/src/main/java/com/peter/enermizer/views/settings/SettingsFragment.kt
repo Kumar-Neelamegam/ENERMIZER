@@ -12,9 +12,6 @@ import com.peter.enermizer.databinding.FragmentSettingsBinding
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,11 +25,24 @@ class SettingsFragment : Fragment() {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSettings
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        init()
+        controllisteners()
         return root
+    }
+
+    /**
+     * Initialization of the views
+     */
+    private fun init() {
+
+    }
+
+    /**
+     * Controllisteners for the UI components
+     */
+    private fun controllisteners() {
+
+
     }
 
     override fun onDestroyView() {

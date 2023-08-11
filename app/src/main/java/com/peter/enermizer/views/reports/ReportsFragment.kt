@@ -19,9 +19,6 @@ class ReportsFragment : Fragment() {
 
     private var TAG = "ReportsFragment"
     private var _binding: FragmentReportsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var reportsViewModel: ReportsViewModel
@@ -37,11 +34,23 @@ class ReportsFragment : Fragment() {
         _binding = FragmentReportsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        init()
         controllisteners()
 
         return root
     }
 
+    /**
+     * Initialization of the views
+     */
+    private fun init() {
+
+
+    }
+
+    /**
+     * Controllisteners for the UI components
+     */
     private fun controllisteners() {
         binding.datePicker.setOnClickListener {
             datePickerDialog()

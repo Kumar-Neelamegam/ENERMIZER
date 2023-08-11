@@ -40,5 +40,9 @@
     <string name="label_selected_date_range">Selected Date: %1$S</string>
     <string name="label_select_date">Select Date</string>
 
+    <!-- Settings -->
+    <string name="label_settings_ipaddress">Enter the IP Address</string>
+    <string name="label_settings_ipaddress_hint">192.168.1.1:8080</string>
+
 
 </resources>
