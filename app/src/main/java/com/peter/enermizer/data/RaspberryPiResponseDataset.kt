@@ -1,7 +1,7 @@
-package com.peter.enermizer.services
+package com.peter.enermizer.data
 
-data class RaspberryPiResponse(
+data class RaspberryPiResponseDataset(
     val status: Boolean?,
     val error: String?,
     val message: String?,
-);
+)

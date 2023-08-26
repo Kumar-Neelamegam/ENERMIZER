@@ -1,11 +1,10 @@
 package com.peter.enermizer.views.mainactivity
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.peter.enermizer.services.RaspberryPiResponse
+import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.services.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,36 +19,36 @@ private var job: Job? = null
 var raspberryPi = MutableLiveData<Boolean?>()
 
 
-class MainActivityViewModel: ViewModel() {
-    fun startContinuousTask() {
+class MainActivityViewModel : ViewModel() {
+    fun startPiningRaspberryPi() {
         job = viewModelScope.launch {
             while (true) {
                 // Perform your continuous task here
                 // This could be network requests, database operations, etc.
                 checkRaspBerryPiStatus()
-                delay(5000) // Delay for 5 minutes before the next iteration
+                delay(60000) // Delay for 1 minutes before the next iteration
             }
         }
     }
 
-    fun stopContinuousTask() {
+    fun stopPiningRaspberryPi() {
         job?.cancel()
     }
 
     private fun checkRaspBerryPiStatus() {
         CoroutineScope(Dispatchers.IO).launch {
             RetrofitInstance.apiInstance.getAPIStatus().enqueue(object :
-                Callback<RaspberryPiResponse> {
+                Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
-                    call: Call<RaspberryPiResponse>,
-                    response: Response<RaspberryPiResponse>
+                    call: Call<RaspberryPiResponseDataset>,
+                    response: Response<RaspberryPiResponseDataset>
                 ) {
                     if (response.body() != null) {
                         raspberryPi.value = response.body()!!.status
                     }
                 }
 
-                override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
+                override fun onFailure(call: Call<RaspberryPiResponseDataset>, t: Throwable) {
                     Log.d("TAG", t.message.toString())
                     raspberryPi.value = false
                 }

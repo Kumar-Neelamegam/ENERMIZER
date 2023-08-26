@@ -13,17 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.ActivityMainBinding
-import com.peter.enermizer.services.RaspberryPiResponse
-import com.peter.enermizer.services.RetrofitInstance
 import com.peter.enermizer.utils.ConnectionType
 import com.peter.enermizer.utils.NetworkMonitorUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,13 +45,13 @@ class MainActivity : AppCompatActivity() {
         /**
          * Check whether internet is up and running
          */
-        checkInternetAndSocket()
+        checkInternetAndRelay()
 
         /**
          * Check whether raspberry pi is up and running
          */
-        viewModel.startContinuousTask()
-        viewModel.observeResponseLiveData().observeForever{
+        viewModel.startPiningRaspberryPi()
+        viewModel.observeResponseLiveData().observeForever {
             if (it != null) {
                 changeRaspberryPiStatus(it)
             }
@@ -70,10 +61,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.stopContinuousTask()
+        viewModel.stopPiningRaspberryPi()
     }
 
-    private fun checkInternetAndSocket() {
+    private fun checkInternetAndRelay() {
         networkMonitor.result = { isAvailable, type ->
             runOnUiThread {
                 when (isAvailable) {

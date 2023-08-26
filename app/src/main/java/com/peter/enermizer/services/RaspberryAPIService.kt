@@ -1,6 +1,7 @@
 package com.peter.enermizer.services
 
 import com.peter.enermizer.BuildConfig.ServiceIPAddress
+import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.data.ReportDataObject
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -8,27 +9,27 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 private val BASE_URL = "http://$ServiceIPAddress/api/"
 
 interface RaspberryAPIService {
     @GET("status")
-    fun getAPIStatus(): Call<RaspberryPiResponse>
+    fun getAPIStatus(): Call<RaspberryPiResponseDataset>
 
-    @POST("relaycontroller")
+    @POST("relaycontroller/{relayNumber}/{relayStatus}")
     fun postRelayController(
-        @Query("relayNumber") socketNumber: Int,
-        @Query("relayStatus") socketStatus: Int
-    ): Call<RaspberryPiResponse>
+        @Path("relayNumber") relayNumber: Int,
+        @Path("relayStatus") relayStatus: Int
+    ): Call<RaspberryPiResponseDataset>
 
-    @POST("relaystatus")
+    @POST("relaystatus/{relayNumber}")
     fun getRelayController(
-        @Query("relayNumber") socketNumber: Int
-    ): Call<RaspberryPiResponse>
+        @Path("relayNumber") relayNumber: Int
+    ): Call<RaspberryPiResponseDataset>
 
     @POST("getAllReports")
-    fun getCombinedReports(@Body data: ReportDataObject): Call<RaspberryPiResponse>
+    fun getCombinedReports(@Body data: ReportDataObject): Call<RaspberryPiResponseDataset>
 
 
 }

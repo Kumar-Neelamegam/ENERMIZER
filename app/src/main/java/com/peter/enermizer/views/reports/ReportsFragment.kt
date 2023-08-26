@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.peter.enermizer.R
@@ -81,7 +80,7 @@ class ReportsFragment : Fragment() {
 
             // Formatting the selected dates as strings
             // 2023-07-25 15:00:00
-            val sdf = SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault())
+            val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
             val startDateString = sdf.format(Date(startDate))
             val endDateString = sdf.format(Date(endDate))
 

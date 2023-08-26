@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.peter.enermizer.data.ErrorObject
-import com.peter.enermizer.services.RaspberryPiResponse
+import com.peter.enermizer.data.RaspberryPiRelayDataset
+import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.services.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,66 +14,68 @@ import retrofit2.Response
 
 class DashboardViewModel : ViewModel() {
 
-/*
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
-*/
-
-    private var raspberryPiResponse = MutableLiveData<RaspberryPiResponse>()
-    private var socketStatus = MutableLiveData<RaspberryPiResponse>()
-    private var _errorStatus: MutableLiveData<ErrorObject> =  MutableLiveData<ErrorObject>()
+    var raspberryPiResponse = MutableLiveData<RaspberryPiResponseDataset>()
+    private var relayStatus = MutableLiveData<RaspberryPiRelayDataset>()
+    private var _errorStatus: MutableLiveData<ErrorObject> = MutableLiveData<ErrorObject>()
     val errorStatus = _errorStatus
 
-    fun callSocketController(socketNumber: Int, socketStatus: Int) {
-        RetrofitInstance.apiInstance.postRelayController(socketNumber, socketStatus).enqueue(object : Callback<RaspberryPiResponse> {
-            override fun onResponse(
-                call: Call<RaspberryPiResponse>,
-                response: Response<RaspberryPiResponse>
-            ) {
-                if (response.body() != null) {
-                    raspberryPiResponse.value = response.body()!!
-                } else {
-                    return
+    fun callRelayController(relayNumber: Int, relayStatus: Int) {
+        RetrofitInstance.apiInstance.postRelayController(relayNumber, relayStatus)
+            .enqueue(object : Callback<RaspberryPiResponseDataset> {
+                override fun onResponse(
+                    call: Call<RaspberryPiResponseDataset>,
+                    response: Response<RaspberryPiResponseDataset>
+                ) {
+                    if (response.body() != null) {
+                        raspberryPiResponse.value = response.body()
+                    } else {
+                        return
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
-                Log.d("TAG", t.message.toString())
-                _errorStatus.value = ErrorObject("Failed to control socket (Socket Number: $socketNumber &  SocketStatus: $socketStatus) Try later", true)
-            }
-        })
+                override fun onFailure(call: Call<RaspberryPiResponseDataset>, t: Throwable) {
+                    Log.d("TAG", t.message.toString())
+                    _errorStatus.value = ErrorObject(
+                        "Failed to control relay (Relay Number: $relayNumber &  relayStatus: $relayStatus) Try later",
+                        true
+                    )
+                }
+            })
 
     }
 
-    fun checkSocketController(socketNumber: Int) {
-        RetrofitInstance.apiInstance.getRelayController(socketNumber).enqueue(object : Callback<RaspberryPiResponse> {
-            override fun onResponse(
-                call: Call<RaspberryPiResponse>,
-                response: Response<RaspberryPiResponse>
-            ) {
-                if (response.body() != null) {
-                    raspberryPiResponse.value = response.body()!!
-                } else {
-                    return
+    fun checkRelayController(relayNumber: Int) {
+        RetrofitInstance.apiInstance.getRelayController(relayNumber)
+            .enqueue(object : Callback<RaspberryPiResponseDataset> {
+                override fun onResponse(
+                    call: Call<RaspberryPiResponseDataset>,
+                    response: Response<RaspberryPiResponseDataset>
+                ) {
+                    if (response.body() != null) {
+                        relayStatus.value = RaspberryPiRelayDataset(
+                            response.body()!!.status, "", "" , relay = relayNumber)
+                    } else {
+                        return
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
-                Log.d("TAG", t.message.toString())
-                _errorStatus.value = ErrorObject("Failed to control socket (Socket Number: $socketNumber) Try later", true)
-            }
-        })
+                override fun onFailure(call: Call<RaspberryPiResponseDataset>, t: Throwable) {
+                    Log.d("TAG", t.message.toString())
+                    _errorStatus.value = ErrorObject(
+                        "Failed to control relay (Relay Number: $relayNumber) Try later",
+                        true
+                    )
+                }
+            })
 
     }
 
-    fun observeResponseLiveData(): LiveData<RaspberryPiResponse> {
+    fun observeResponseLiveData(): LiveData<RaspberryPiResponseDataset> {
         return raspberryPiResponse
     }
 
-    fun observeSocketStatus(): LiveData<RaspberryPiResponse> {
-        return socketStatus
+    fun observeRelayStatus(): LiveData<RaspberryPiRelayDataset> {
+        return relayStatus
     }
 
 }
