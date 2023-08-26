@@ -5,9 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.peter.enermizer.databinding.FragmentDashboardBinding
 
@@ -32,65 +31,69 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-       /* val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        /* val textView: TextView = binding.textDashboard
+         dashboardViewModel.text.observe(viewLifecycleOwner) {
+             textView.text = it
+         }*/
         initialize()
         controllerListeners()
-
+        listenForErrors()
         return root
     }
 
     private fun controllerListeners() {
-        binding.btnOn.setOnClickListener {
-            tempCallToBulbOn()
+        binding.btnOn1.setOnClickListener {
+            controlSockets(1, 1)
         }
 
-        binding.btnOff.setOnClickListener {
-            tempCallToBulbOff()
+        binding.btnOff1.setOnClickListener {
+            controlSockets(1, 0)
         }
+
+        binding.btnOn2.setOnClickListener {
+            controlSockets(2, 1)
+        }
+
+        binding.btnOff2.setOnClickListener {
+            controlSockets(2, 0)
+        }
+
     }
 
     private fun initialize() {
-        changeInternetStatus(dashboardViewModel.checkInternetConnection())
-        changeRaspberryPiStatus(dashboardViewModel.checkRaspberryPiConnection())
-        changeSocket1Status(dashboardViewModel.checkSocketIsActive(1))
-        changeSocket2Status(dashboardViewModel.checkSocketIsActive(2))
+//        dashboardViewModel.checkSocketController(1)
+//        dashboardViewModel.checkSocketController(2)
+//        changeSocketStatus()
     }
 
-    private fun changeSocket2Status(checkSocketIsActive: Boolean) {
+    fun changeSocketStatus() {
+        dashboardViewModel.observeSocketStatus().observe(viewLifecycleOwner) { response ->
+            Log.e(TAG, "Response from Socket Status")
+            Log.e(TAG, response.toString())
+        }
     }
 
-    private fun changeSocket1Status(checkSocketIsActive: Boolean) {
+    private fun listenForErrors() {
+        dashboardViewModel.errorStatus.observeForever {
+            if (it.status) {
+                Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
-    private fun changeRaspberryPiStatus(checkRaspberryPiConnection: Boolean) {
-    }
-
-    private fun changeInternetStatus(checkInternetConnection: Boolean) {
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    fun tempCallToBulbOn() {
-        dashboardViewModel.callBulbOnService()
-        dashboardViewModel.observeResponseLiveData().observe(viewLifecycleOwner, Observer { response ->
-            Log.e(TAG, "Response from BulbOn")
-            Log.e(TAG, response.toString())
-            Log.e(TAG, response.toString())
-        })
-    }
-    fun tempCallToBulbOff() {
-        dashboardViewModel.callBulbOffService()
-        dashboardViewModel.observeResponseLiveData().observe(viewLifecycleOwner) { response ->
-            Log.e(TAG, "Response from BulbOff")
-            Log.e(TAG, response.toString())
-            Log.e(TAG, response.toString())
-        }
+    private fun controlSockets(switchNumber: Int, switchStatus: Int) {
+        dashboardViewModel.callSocketController(switchNumber, switchStatus)
+        dashboardViewModel.observeResponseLiveData()
+            .observe(viewLifecycleOwner) { response ->
+                Log.e(TAG, "Response from Socket Controller")
+                Log.e(TAG, response.toString())
+            }
     }
 
 }

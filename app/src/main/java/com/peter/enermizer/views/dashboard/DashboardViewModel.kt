@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.peter.enermizer.data.ErrorObject
 import com.peter.enermizer.services.RaspberryPiResponse
 import com.peter.enermizer.services.RetrofitInstance
 import retrofit2.Call
@@ -20,9 +21,12 @@ class DashboardViewModel : ViewModel() {
 */
 
     private var raspberryPiResponse = MutableLiveData<RaspberryPiResponse>()
+    private var socketStatus = MutableLiveData<RaspberryPiResponse>()
+    private var _errorStatus: MutableLiveData<ErrorObject> =  MutableLiveData<ErrorObject>()
+    val errorStatus = _errorStatus
 
-    fun callBulbOnService() {
-        RetrofitInstance.apiInstance.getBulbOn().enqueue(object : Callback<RaspberryPiResponse> {
+    fun callSocketController(socketNumber: Int, socketStatus: Int) {
+        RetrofitInstance.apiInstance.postRelayController(socketNumber, socketStatus).enqueue(object : Callback<RaspberryPiResponse> {
             override fun onResponse(
                 call: Call<RaspberryPiResponse>,
                 response: Response<RaspberryPiResponse>
@@ -36,13 +40,14 @@ class DashboardViewModel : ViewModel() {
 
             override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
                 Log.d("TAG", t.message.toString())
+                _errorStatus.value = ErrorObject("Failed to control socket (Socket Number: $socketNumber &  SocketStatus: $socketStatus) Try later", true)
             }
         })
 
     }
 
-    fun callBulbOffService() {
-        RetrofitInstance.apiInstance.getBulbOff().enqueue(object : Callback<RaspberryPiResponse> {
+    fun checkSocketController(socketNumber: Int) {
+        RetrofitInstance.apiInstance.getRelayController(socketNumber).enqueue(object : Callback<RaspberryPiResponse> {
             override fun onResponse(
                 call: Call<RaspberryPiResponse>,
                 response: Response<RaspberryPiResponse>
@@ -56,6 +61,7 @@ class DashboardViewModel : ViewModel() {
 
             override fun onFailure(call: Call<RaspberryPiResponse>, t: Throwable) {
                 Log.d("TAG", t.message.toString())
+                _errorStatus.value = ErrorObject("Failed to control socket (Socket Number: $socketNumber) Try later", true)
             }
         })
 
@@ -65,17 +71,8 @@ class DashboardViewModel : ViewModel() {
         return raspberryPiResponse
     }
 
-    //TODO check the raspberry pi connection and return the boolean status
-    fun checkRaspberryPiConnection():Boolean {
-        return false
-    }
-
-    fun checkInternetConnection():Boolean {
-        return false
-    }
-
-    fun checkSocketIsActive(socketNumber: Int):Boolean {
-        return false
+    fun observeSocketStatus(): LiveData<RaspberryPiResponse> {
+        return socketStatus
     }
 
 }
