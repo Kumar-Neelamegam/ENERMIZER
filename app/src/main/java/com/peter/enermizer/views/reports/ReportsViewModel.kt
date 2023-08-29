@@ -27,8 +27,8 @@ class ReportsViewModel : ViewModel() {
 
         val json = """
                     {
-                    "fromDate_aws": "$fromDate 01:00:00",
-                    "toDate_aws": "$toDate 00:00:00",
+                    "fromDate_aws": "$fromDate",
+                    "toDate_aws": "$toDate",
                     "fromDate_sm": "$fromDate",
                     "toDate_sm": "$toDate"
                     }

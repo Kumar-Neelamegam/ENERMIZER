@@ -58,7 +58,7 @@
                         android:text="@string/report1"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30" />
+                        android:textSize="@dimen/text_size_20" />
 
                     <TextView
                         android:id="@+id/value_report1"
@@ -70,7 +70,7 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30"
+                        android:textSize="@dimen/text_size_20"
                         tools:text="100" />
 
 
@@ -98,7 +98,7 @@
                         android:text="@string/report2"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30" />
+                        android:textSize="@dimen/text_size_20" />
 
                     <TextView
                         android:id="@+id/label_report2_subtitle"
@@ -109,7 +109,7 @@
                         android:text="@string/report2_subtitle"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_15" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <TextView
                         android:id="@+id/value_report2"
@@ -121,7 +121,7 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30"
+                        android:textSize="@dimen/text_size_20"
                         tools:text="100" />
 
 
@@ -149,7 +149,7 @@
                         android:text="@string/report3"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30" />
+                        android:textSize="@dimen/text_size_20" />
 
 
                     <TextView
@@ -161,7 +161,7 @@
                         android:text="@string/report3_subtitle"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_15" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <TextView
                         android:id="@+id/value_report3"
@@ -173,7 +173,7 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30"
+                        android:textSize="@dimen/text_size_20"
                         tools:text="100" />
 
 
@@ -201,7 +201,7 @@
                         android:text="@string/report4"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30" />
+                        android:textSize="@dimen/text_size_20" />
 
                     <TextView
                         android:id="@+id/value_report4"
@@ -213,7 +213,7 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30"
+                        android:textSize="@dimen/text_size_20"
                         tools:text="100" />
 
 
@@ -234,14 +234,14 @@
 
                     <TextView
                         android:id="@+id/label_report5"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_10"
                         android:layout_marginEnd="@dimen/margin_10"
                         android:text="@string/report5"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30" />
+                        android:textSize="@dimen/text_size_20" />
 
                     <TextView
                         android:id="@+id/label_report5_subtitle"
@@ -252,7 +252,7 @@
                         android:text="@string/report5_subtitle"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_20" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <TextView
                         android:id="@+id/value_report5"
@@ -264,7 +264,7 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_30"
+                        android:textSize="@dimen/text_size_20"
                         tools:text="100" />
 
 

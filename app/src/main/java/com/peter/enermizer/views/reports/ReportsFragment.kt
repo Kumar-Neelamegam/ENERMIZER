@@ -1,16 +1,24 @@
 package com.peter.enermizer.views.reports
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentReportsBinding
+import org.json.JSONObject
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,6 +30,8 @@ class ReportsFragment : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var reportsViewModel: ReportsViewModel
+    private lateinit var customProgressDialog: Dialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,9 +98,10 @@ class ReportsFragment : Fragment() {
             val selectedDateRange = "$startDateString - $endDateString"
 
             // Displaying the selected date range in the TextView
-            binding.selectedDate.text =
-                resources.getString(R.string.label_selected_date_range, selectedDateRange)
+            binding.selectedDate.text = resources.getString(R.string.label_selected_date_range, selectedDateRange)
             reportsViewModel.getReportsBasedOnDates(startDateString, endDateString)
+            //Show progress
+            showProgress(binding.selectedDate.text.toString())
             updateReportsWithValues()
         }
 
@@ -100,14 +111,60 @@ class ReportsFragment : Fragment() {
 
     private fun updateReportsWithValues() {
         reportsViewModel.observeResponseLiveData().observe(viewLifecycleOwner) { response ->
+            //Hide progress
+            customProgressDialog.dismiss()
             Log.e(TAG, "Response from getReportsBasedOnDates")
             Log.e(TAG, response.toString())
+            val decimalFormat = DecimalFormat("#.####")
+            decimalFormat.roundingMode = RoundingMode.HALF_UP
+
+            val jsonObject = response.message?.let { JSONObject(it) }
+
+            val report1Value = jsonObject?.getString("report1")
+                ?.let { decimalFormat.format(it.toDouble()) }
+            val report2Value = jsonObject?.getString("report2")
+                ?.let { decimalFormat.format(it.toDouble()) }
+            val report3Value = jsonObject?.getString("report3")
+                ?.let { decimalFormat.format(it.toDouble()) }
+            val report4Value = jsonObject?.getString("report4")
+                ?.let { decimalFormat.format(it.toDouble()) }
+            val report5Value = jsonObject?.getString("report5")
+                ?.let { decimalFormat.format(it.toDouble()) }
+
+            binding.valueReport1.text = report1Value
+            binding.valueReport2.text = report2Value
+            binding.valueReport3.text = report3Value
+            binding.valueReport4.text = report4Value
+            binding.valueReport5.text = report5Value
         }
-        //binding.valueReport1.text = "100"
-        //binding.valueReport2.text = "200"
-        //binding.valueReport3.text = "300"
-        //binding.valueReport4.text = "500"
-        //binding.valueReport5.text = "600"
+
+    }
+
+    fun showProgress(selectedDates: String) {
+        // Initialize the custom progress dialog
+        customProgressDialog = Dialog(requireContext())
+        customProgressDialog.setContentView(R.layout.custom_progress_dialog_layout)
+        customProgressDialog.setCancelable(false)
+
+        // Find the views in the custom dialog layout
+        val dialogTitle = customProgressDialog.findViewById<TextView>(R.id.dialogTitle)
+        val dialogText = customProgressDialog.findViewById<TextView>(R.id.dialogText)
+        val progressBar = customProgressDialog.findViewById<ProgressBar>(R.id.dialogProgressBar)
+
+        // Set title and text
+        dialogTitle.text = "Please wait"
+        dialogText.text = "Fetching reports for - $selectedDates"
+
+        // Show the custom progress dialog
+        customProgressDialog.show()
+/*
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            // Dismiss the custom progress dialog when loading is done
+            customProgressDialog.dismiss()
+        }, 15000)
+*/
+
     }
 
     override fun onDestroyView() {
