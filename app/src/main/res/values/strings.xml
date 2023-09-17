@@ -16,8 +16,11 @@
     <!-- Home activity strings -->
     <string name="relay_1">Relay 1</string>
     <string name="relay_2">Relay 2</string>
+    <string name="btn_label_auto">AUTO</string>
     <string name="btn_label_on">ON</string>
     <string name="btn_label_off">OFF</string>
+    <string name="label_edit_relay1_hint">Enter Power in kWh</string>
+    <string name="label_edit_relay2_hint">Enter Power in kWh</string>
 
     <!-- Menu strings -->
     <string name="bottom_menu_dashboard">Dashboard</string>

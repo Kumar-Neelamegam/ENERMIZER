@@ -115,29 +115,37 @@ class ReportsFragment : Fragment() {
             customProgressDialog.dismiss()
             Log.e(TAG, "Response from getReportsBasedOnDates")
             Log.e(TAG, response.toString())
-            val decimalFormat = DecimalFormat("#.####")
-            decimalFormat.roundingMode = RoundingMode.HALF_UP
 
             val jsonObject = response.message?.let { JSONObject(it) }
 
             val report1Value = jsonObject?.getString("report1")
-                ?.let { decimalFormat.format(it.toDouble()) }
+                ?.let { checkNan(it) }
             val report2Value = jsonObject?.getString("report2")
-                ?.let { decimalFormat.format(it.toDouble()) }
+                ?.let { checkNan(it) }
             val report3Value = jsonObject?.getString("report3")
-                ?.let { decimalFormat.format(it.toDouble()) }
+                ?.let { checkNan(it) }
             val report4Value = jsonObject?.getString("report4")
-                ?.let { decimalFormat.format(it.toDouble()) }
+                ?.let { checkNan(it) }
             val report5Value = jsonObject?.getString("report5")
-                ?.let { decimalFormat.format(it.toDouble()) }
+                ?.let { checkNan(it) }
 
-            binding.valueReport1.text = report1Value
-            binding.valueReport2.text = report2Value
-            binding.valueReport3.text = report3Value
-            binding.valueReport4.text = report4Value
-            binding.valueReport5.text = report5Value
+            binding.valueReport1.text = report1Value.toString()
+            binding.valueReport2.text = report2Value.toString()
+            binding.valueReport3.text = report3Value.toString()
+            binding.valueReport4.text = report4Value.toString()
+            binding.valueReport5.text = report5Value.toString()
         }
 
+    }
+
+    fun checkNan(reportValue: String): Any {
+        val decimalFormat = DecimalFormat("#.####")
+        decimalFormat.roundingMode = RoundingMode.HALF_UP
+        return if(reportValue == "nan") {
+            0.0
+        } else {
+            decimalFormat.format(reportValue.toDouble())
+        }
     }
 
     fun showProgress(selectedDates: String) {

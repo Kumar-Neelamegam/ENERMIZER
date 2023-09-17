@@ -36,6 +36,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun controllerListeners() {
+        //TODO check whether ip address and relay power are configured in settings
         binding.btnOn1.setOnClickListener {
             relayController(1, 1) // TURN ON RELAY 1
         }

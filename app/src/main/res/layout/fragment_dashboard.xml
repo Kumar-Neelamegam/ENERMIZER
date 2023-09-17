@@ -89,6 +89,18 @@
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
+                <Button
+                    android:id="@+id/btn_relay1_auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/Orange"
+                    android:text="@string/btn_label_auto"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_off"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/relay1_label" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <View
@@ -156,6 +168,18 @@
                         app:layout_constraintTop_toBottomOf="@+id/relay2_label" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <Button
+                    android:id="@+id/btn_relay2_auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/Orange"
+                    android:text="@string/btn_label_auto"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_off"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/relay1_label" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

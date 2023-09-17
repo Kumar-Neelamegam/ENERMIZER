@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".views.settings.SettingsFragment">
 
-    <!-- Report 1 -->
+    <!-- Ip address settings -->
     <androidx.cardview.widget.CardView
         style="@style/CustomReportCards"
         app:cardBackgroundColor="@color/reportCard1">
@@ -38,17 +38,85 @@
                 android:hint="@string/label_settings_ipaddress_hint"
                 android:inputType="number" />
 
-            <Button
-                android:layout_gravity="right"
-                android:id="@+id/save_button"
-                android:layout_width="wrap_content"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Relay power settings -->
+    <androidx.cardview.widget.CardView
+        style="@style/CustomReportCards"
+        app:cardBackgroundColor="@color/reportCard1">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_relay1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/margin_10"
-                android:text="Save" />
+                android:text="@string/relay_1"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_30" />
 
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_relay1_power"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:digits="0123456789"
+                android:ems="10"
+                android:hint="@string/label_edit_relay1_hint"
+                android:inputType="number" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        style="@style/CustomReportCards"
+        app:cardBackgroundColor="@color/reportCard1">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/label_relay2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:text="@string/relay_2"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_30" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_relay2_power"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:digits="0123456789"
+                android:ems="10"
+                android:hint="@string/label_edit_relay1_hint"
+                android:inputType="number" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:text="Save" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
