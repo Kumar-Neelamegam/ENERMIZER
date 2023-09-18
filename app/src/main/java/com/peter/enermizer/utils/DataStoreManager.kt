@@ -34,7 +34,7 @@ class DataStoreManager(private val context: Context) {
 
     // get the ipaddress from settings
     val settingsIPAddressFlow: Flow<Any> = context.dataStore.data.map { preferences ->
-        preferences[SETTINGS_IP_ADDRESS_KEY] ?: "192.168.1.1:8080"
+        preferences[SETTINGS_IP_ADDRESS_KEY] ?: "192.168.1.166:8080"
     }
 
     // get the relay1 power

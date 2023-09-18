@@ -1,6 +1,5 @@
 package com.peter.enermizer.services
 
-import com.peter.enermizer.BuildConfig.ServiceIPAddress
 import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.data.ReportDataObject
 import okhttp3.OkHttpClient
@@ -14,7 +13,7 @@ import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
 
-private val BASE_URL = "http://$ServiceIPAddress/api/"
+private val BASE_URL = "http://192.168.1.116:8080/api/"
 
 interface RaspberryAPIService {
     @GET("status")
