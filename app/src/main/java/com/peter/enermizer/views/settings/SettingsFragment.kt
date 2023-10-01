@@ -1,8 +1,6 @@
 package com.peter.enermizer.views.settings
 
-import android.R.attr.button
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.peter.enermizer.databinding.FragmentSettingsBinding
-import com.peter.enermizer.utils.Common
 import com.peter.enermizer.utils.DataStoreManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -24,12 +20,17 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
+    private val dataStoreManager: DataStoreManager by lazy {
+        DataStoreManager(requireContext())
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
+        val settingsViewModel =
             ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
@@ -48,26 +49,28 @@ class SettingsFragment : Fragment() {
     }
 
     private fun loadSettings() {
-        if(DataStoreManager(requireContext()).settingsIPAddressFlow.toString().isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = DataStoreManager(requireContext()).settingsIPAddressFlow.first()
-                binding.editIpaddress.setText(data.toString())
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if(storedIpAddress?.isNotEmpty() == true) {
+                binding.editIpaddress.setText(dataStoreManager.settingsIPAddressFlow().toString())
             }
         }
 
-        if(DataStoreManager(requireContext()).settingsRelay1Power.toString().isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = DataStoreManager(requireContext()).settingsRelay1Power.first()
-                binding.editRelay1Power.setText(data.toString())
+        CoroutineScope(Dispatchers.Main).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if(storedIpAddress?.isNotEmpty() == true) {
+                binding.editRelay1Power.setText(dataStoreManager.settingsRelay1Power().toString())
             }
         }
 
-        if(DataStoreManager(requireContext()).settingsRelay2Power.toString().isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = DataStoreManager(requireContext()).settingsRelay2Power.first()
-                binding.editRelay2Power.setText(data.toString())
+        CoroutineScope(Dispatchers.Main).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if(storedIpAddress?.isNotEmpty() == true) {
+                binding.editRelay2Power.setText(dataStoreManager.settingsRelay2Power().toString())
             }
         }
+
     }
 
     /**
@@ -122,18 +125,9 @@ class SettingsFragment : Fragment() {
             .setTitleText("Success")
             .setContentText(message)
             .show()
-        checkIpAddressIsSaved()
-    }
+        // TODO save the settings to the server
 
-    private fun checkIpAddressIsSaved() {
-        if(DataStoreManager(requireContext()).settingsIPAddressFlow.toString().isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                Log.e("SettingsFragment", "http://"+ DataStoreManager(requireContext()).settingsIPAddressFlow.first().toString()+"/api/")
-                Common.GLOBAL_IP_ADDRESS = "http://"+ DataStoreManager(requireContext()).settingsIPAddressFlow.first().toString()+"/api/"
-            }
-        }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

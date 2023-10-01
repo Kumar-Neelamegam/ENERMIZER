@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val networkMonitor = NetworkMonitorUtil(this)
     private lateinit var viewModel: MainActivityViewModel
+    private val dataStoreManager: DataStoreManager by lazy {
+        DataStoreManager(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,23 +56,25 @@ class MainActivity : AppCompatActivity() {
          * Check whether internet is up and running
          */
         checkInternetAndRelay()
-        checkIpAddressIsSaved()
         /**
          * Check whether settings is saved
          */
-        if(Common.GLOBAL_IP_ADDRESS.isEmpty()) {
-            navView.selectedItemId = R.id.navigation_settings
-        } else {
-            raspberryConnectivity()
+        CoroutineScope(Dispatchers.Main).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if(storedIpAddress?.isNotEmpty() == true) {
+                raspberryConnectivity(storedIpAddress.toString())
+            }else {
+                navView.selectedItemId = R.id.navigation_settings
+            }
         }
 
     }
 
-    private fun raspberryConnectivity() {
+    private fun raspberryConnectivity(ipaddress: String) {
         /**
          * Check whether raspberry pi is up and running
          */
-        viewModel.startPiningRaspberryPi()
+        viewModel.startPiningRaspberryPi(ipaddress)
         viewModel.observeResponseLiveData().observeForever {
             if (it != null) {
                 changeRaspberryPiStatus(it)
@@ -152,15 +158,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
             binding.internetStatus.setColorFilter(ContextCompat.getColor(this, R.color.Red))
-        }
-    }
-
-    private fun checkIpAddressIsSaved() {
-        if(DataStoreManager(this).settingsIPAddressFlow.toString().isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                Log.e("MainActivity", "http://"+ DataStoreManager(applicationContext).settingsIPAddressFlow.first().toString()+"/api/")
-                Common.GLOBAL_IP_ADDRESS = "http://"+ DataStoreManager(applicationContext).settingsIPAddressFlow.first().toString()+"/api/"
-            }
         }
     }
 

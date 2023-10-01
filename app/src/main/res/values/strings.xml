@@ -30,7 +30,7 @@
     <!-- Title strings -->
     <string name="title_dashboard">Enermizer - Dashboard</string>
     <string name="title_reports">Enermizer - Reports</string>
-    <string name="title_settings">Enermizer Settings</string>
+    <string name="title_settings">Enermizer - Settings</string>
 
     <!-- Reports -->
     <string name="report1">Energy consumed over period of time (kWh)</string>

@@ -3,8 +3,8 @@ package com.peter.enermizer.utils
 class Common {
 
     companion object {
-        var GLOBAL_IP_ADDRESS: String = ""
-
+        fun buildIpaddress(ipaddress: String): String {
+            return "http://$ipaddress/api/"
+        }
     }
-
 }

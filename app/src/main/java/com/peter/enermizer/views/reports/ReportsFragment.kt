@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentReportsBinding
+import com.peter.enermizer.utils.DataStoreManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -31,8 +35,9 @@ class ReportsFragment : Fragment() {
 
     lateinit var reportsViewModel: ReportsViewModel
     private lateinit var customProgressDialog: Dialog
-
-
+    private val dataStoreManager: DataStoreManager by lazy {
+        DataStoreManager(requireContext())
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -100,7 +105,13 @@ class ReportsFragment : Fragment() {
 
             // Displaying the selected date range in the TextView
             binding.selectedDate.text = resources.getString(R.string.label_selected_date_range, selectedDateRange)
-            reportsViewModel.getReportsBasedOnDates(startDateString, endDateString)
+            CoroutineScope(Dispatchers.Main).launch {
+                val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+                if(storedIpAddress?.isNotEmpty() == true) {
+                    reportsViewModel.getReportsBasedOnDates(storedIpAddress.toString(), startDateString, endDateString)
+                }
+            }
+
             //Show progress
             showProgress(binding.selectedDate.text.toString())
             updateReportsWithValues()

@@ -20,8 +20,9 @@ class DashboardViewModel : ViewModel() {
     private var _errorStatus: MutableLiveData<ErrorObject> = MutableLiveData<ErrorObject>()
     val errorStatus = _errorStatus
 
-    fun callRelayController(relayNumber: Int, relayStatus: Int) {
-        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.postRelayController(relayNumber, relayStatus)
+    fun callRelayController(ipaddress: String, relayNumber: Int, relayStatus: Int) {
+
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.postRelayController(relayNumber, relayStatus)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
@@ -45,8 +46,8 @@ class DashboardViewModel : ViewModel() {
 
     }
 
-    fun checkRelayController(relayNumber: Int) {
-        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getRelayController(relayNumber)
+    fun checkRelayController(ipaddress: String, relayNumber: Int) {
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getRelayController(relayNumber)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
@@ -68,7 +69,6 @@ class DashboardViewModel : ViewModel() {
                     )
                 }
             })
-
     }
 
     fun observeResponseLiveData(): LiveData<RaspberryPiResponseDataset> {

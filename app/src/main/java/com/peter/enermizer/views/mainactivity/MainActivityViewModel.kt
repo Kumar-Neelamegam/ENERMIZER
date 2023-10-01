@@ -21,12 +21,12 @@ var raspberryPi = MutableLiveData<Boolean?>()
 
 
 class MainActivityViewModel : ViewModel() {
-    fun startPiningRaspberryPi() {
+    fun startPiningRaspberryPi(ipaddress: String) {
         job = viewModelScope.launch {
             while (true) {
                 // Perform your continuous task here
                 // This could be network requests, database operations, etc.
-                checkRaspBerryPiStatus()
+                checkRaspBerryPiStatus(ipaddress)
                 delay(60000) // Delay for 1 minutes before the next iteration
             }
         }
@@ -36,9 +36,9 @@ class MainActivityViewModel : ViewModel() {
         job?.cancel()
     }
 
-    private fun checkRaspBerryPiStatus() {
+    private fun checkRaspBerryPiStatus(ipaddress: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getAPIStatus().enqueue(object :
+            RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getAPIStatus().enqueue(object :
                 Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,

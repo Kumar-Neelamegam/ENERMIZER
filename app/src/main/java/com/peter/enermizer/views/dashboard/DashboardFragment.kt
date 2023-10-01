@@ -28,7 +28,10 @@ class DashboardFragment : Fragment() {
     private var TAG = "DashboardFragment"
     private val relay1Number = 4
     private val relay2Number = 5
-
+    private var ipaddress = ""
+    private val dataStoreManager: DataStoreManager by lazy {
+        DataStoreManager(requireContext())
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,7 +48,6 @@ class DashboardFragment : Fragment() {
     }
 
     private fun controllerListeners() {
-        //TODO check whether ip address and relay power are configured in settings
         binding.btnOn1.setOnClickListener {
             relayController(relay1Number, 1) // TURN ON RELAY 1
         }
@@ -62,6 +64,13 @@ class DashboardFragment : Fragment() {
             relayController(relay2Number, 0) // TURN OFF RELAY 2
         }
 
+        binding.btnRelay1Auto.setOnClickListener {
+
+        }
+
+        binding.btnRelay2Auto.setOnClickListener {
+
+        }
     }
 
     private fun initialize() {
@@ -69,19 +78,22 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateRelayStatus() {
-        if(Common.GLOBAL_IP_ADDRESS.isEmpty()) {
-            return
+        CoroutineScope(Dispatchers.Main).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if(storedIpAddress?.isNotEmpty() == true) {
+                ipaddress = storedIpAddress.toString()
+                dashboardViewModel.checkRelayController(ipaddress, relay1Number)
+                dashboardViewModel.checkRelayController(ipaddress, relay2Number)
+                changeRelayStatus()
+            }
         }
-        dashboardViewModel.checkRelayController(relay1Number)
-        dashboardViewModel.checkRelayController(relay2Number)
-        changeRelayStatus()
     }
 
     private fun changeRelayStatus() {
         dashboardViewModel.observeRelayStatus().observe(viewLifecycleOwner) { response ->
             Log.e(TAG, "Response --> Relay Status")
             Log.e(TAG, response.toString())
-            if (response.relay == 1) {
+            if (response.relay == relay1Number) {
                 if (response.status == true) {
                     binding.imgvwRelay1.setColorFilter(
                         ContextCompat.getColor(
@@ -97,7 +109,7 @@ class DashboardFragment : Fragment() {
                         )
                     )
                 }
-            } else if (response.relay == 2) {
+            } else if (response.relay == relay2Number) {
                 if (response.status == true) {
                     binding.imgvwRelay2.setColorFilter(
                         ContextCompat.getColor(
@@ -127,21 +139,20 @@ class DashboardFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun relayController(relayNumber: Int, relayStatus: Int) {
-        dashboardViewModel.callRelayController(relayNumber, relayStatus)
+        dashboardViewModel.callRelayController(ipaddress, relayNumber, relayStatus)
         dashboardViewModel.observeResponseLiveData()
             .observe(viewLifecycleOwner) { response ->
                 Log.e(TAG, "Response --> Relay Controller")
                 Log.e(TAG, response.toString())
                 updateRelayStatus()
-
                 if (response.status == true) {
+
                 }
             }
     }

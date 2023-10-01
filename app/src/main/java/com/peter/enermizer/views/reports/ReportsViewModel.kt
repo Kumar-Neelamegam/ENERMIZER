@@ -25,12 +25,12 @@ class ReportsViewModel : ViewModel() {
     private var _errorStatus: MutableLiveData<ErrorObject> = MutableLiveData<ErrorObject>()
     val errorStatus = _errorStatus
 
-    fun getReportsBasedOnDates(fromDate: String, toDate: String) {
+    fun getReportsBasedOnDates(ipaddress: String, fromDate: String, toDate: String) {
 
         val jsonData = "{ \"fromDate\": \"$fromDate\", \"toDate\": \"$toDate\" }"
 
         val dateObject = Gson().fromJson(jsonData, ReportDataObject::class.java)
-        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getCombinedReports(dateObject)
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getCombinedReports(dateObject)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
