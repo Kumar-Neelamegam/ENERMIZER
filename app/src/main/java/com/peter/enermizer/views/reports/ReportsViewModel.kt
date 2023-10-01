@@ -6,13 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.peter.enermizer.data.ErrorObject
-import com.peter.enermizer.data.ReportDataObject
 import com.peter.enermizer.data.RaspberryPiResponseDataset
+import com.peter.enermizer.data.ReportDataObject
 import com.peter.enermizer.services.RetrofitInstance
 import com.peter.enermizer.utils.Common
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class ReportsViewModel : ViewModel() {
 
@@ -26,15 +27,9 @@ class ReportsViewModel : ViewModel() {
 
     fun getReportsBasedOnDates(fromDate: String, toDate: String) {
 
-        val json = """
-                    {
-                    "fromDate_aws": "$fromDate",
-                    "toDate_aws": "$toDate",
-                    "fromDate_sm": "$fromDate",
-                    "toDate_sm": "$toDate"
-                    }
-                    """
-        val dateObject = Gson().fromJson(json, ReportDataObject::class.java)
+        val jsonData = "{ \"fromDate\": \"$fromDate\", \"toDate\": \"$toDate\" }"
+
+        val dateObject = Gson().fromJson(jsonData, ReportDataObject::class.java)
         RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getCombinedReports(dateObject)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
@@ -44,6 +39,7 @@ class ReportsViewModel : ViewModel() {
                     if (response.body() != null) {
                         raspberryPiResponse.value = response.body()!!
                     } else {
+                        _errorStatus.value = ErrorObject("Failed to retrieve reports! Try later", true)
                         return
                     }
                 }

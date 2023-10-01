@@ -55,6 +55,7 @@ class ReportsFragment : Fragment() {
         reportsViewModel.errorStatus.observeForever {
             if (it.status) {
                 Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                if(customProgressDialog.isShowing) customProgressDialog.dismiss()
             }
         }
     }
@@ -90,7 +91,7 @@ class ReportsFragment : Fragment() {
 
             // Formatting the selected dates as strings
             // 2023-07-25 15:00:00
-            val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val startDateString = sdf.format(Date(startDate))
             val endDateString = sdf.format(Date(endDate))
 
