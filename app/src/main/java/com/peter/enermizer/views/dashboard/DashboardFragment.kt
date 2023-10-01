@@ -26,8 +26,8 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var dashboardViewModel: DashboardViewModel
     private var TAG = "DashboardFragment"
-    private val relay1Number = 4
-    private val relay2Number = 5
+    private val relay1Number = 1
+    private val relay2Number = 2
     private var ipaddress = ""
     private val dataStoreManager: DataStoreManager by lazy {
         DataStoreManager(requireContext())
@@ -82,8 +82,7 @@ class DashboardFragment : Fragment() {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
             if(storedIpAddress?.isNotEmpty() == true) {
                 ipaddress = storedIpAddress.toString()
-                dashboardViewModel.checkRelayController(ipaddress, relay1Number)
-                dashboardViewModel.checkRelayController(ipaddress, relay2Number)
+                dashboardViewModel.liveCheckRelayControllers(ipaddress, relay1Number, relay2Number)
                 changeRelayStatus()
             }
         }
