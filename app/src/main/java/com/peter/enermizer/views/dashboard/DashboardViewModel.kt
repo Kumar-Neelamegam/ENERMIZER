@@ -8,6 +8,7 @@ import com.peter.enermizer.data.ErrorObject
 import com.peter.enermizer.data.RaspberryPiRelayDataset
 import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.services.RetrofitInstance
+import com.peter.enermizer.utils.Common
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +21,7 @@ class DashboardViewModel : ViewModel() {
     val errorStatus = _errorStatus
 
     fun callRelayController(relayNumber: Int, relayStatus: Int) {
-        RetrofitInstance.apiInstance.postRelayController(relayNumber, relayStatus)
+        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.postRelayController(relayNumber, relayStatus)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
@@ -45,7 +46,7 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun checkRelayController(relayNumber: Int) {
-        RetrofitInstance.apiInstance.getRelayController(relayNumber)
+        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getRelayController(relayNumber)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,

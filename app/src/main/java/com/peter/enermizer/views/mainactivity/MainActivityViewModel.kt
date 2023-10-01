@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.services.RetrofitInstance
+import com.peter.enermizer.utils.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,7 +38,7 @@ class MainActivityViewModel : ViewModel() {
 
     private fun checkRaspBerryPiStatus() {
         CoroutineScope(Dispatchers.IO).launch {
-            RetrofitInstance.apiInstance.getAPIStatus().enqueue(object :
+            RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getAPIStatus().enqueue(object :
                 Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,

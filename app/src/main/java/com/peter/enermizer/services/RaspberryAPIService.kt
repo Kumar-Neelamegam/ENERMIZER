@@ -13,8 +13,6 @@ import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
 
-private val BASE_URL = "http://192.168.1.116:8080/api/"
-
 interface RaspberryAPIService {
     @GET("status")
     fun getAPIStatus(): Call<RaspberryPiResponseDataset>
@@ -33,10 +31,12 @@ interface RaspberryAPIService {
     @POST("getAllReports")
     fun getCombinedReports(@Body data: ReportDataObject): Call<RaspberryPiResponseDataset>
 
+    @POST("automode/{relayNumber}")
+    fun postAutoMode(@Path("relayNumber") relayNumber: Int): Call<RaspberryPiResponseDataset>
 
 }
 
-object RetrofitInstance {
+class RetrofitInstance(ipaddress: String) {
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .readTimeout(30, TimeUnit.SECONDS)
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -44,7 +44,7 @@ object RetrofitInstance {
 
     val apiInstance: RaspberryAPIService by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(ipaddress)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

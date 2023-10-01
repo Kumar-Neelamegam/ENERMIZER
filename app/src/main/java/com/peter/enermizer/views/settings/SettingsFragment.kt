@@ -1,18 +1,20 @@
 package com.peter.enermizer.views.settings
 
+import android.R.attr.button
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.peter.enermizer.databinding.FragmentSettingsBinding
+import com.peter.enermizer.utils.Common
 import com.peter.enermizer.utils.DataStoreManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -97,6 +99,15 @@ class SettingsFragment : Fragment() {
 
             }
 
+        binding.editRelay2Power.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Perform the button click event
+                binding.saveButton.performClick()
+                return@setOnEditorActionListener true
+            }
+            false
+        };
+
     }
 
     private fun showErrorDialog(message:String) {
@@ -111,6 +122,16 @@ class SettingsFragment : Fragment() {
             .setTitleText("Success")
             .setContentText(message)
             .show()
+        checkIpAddressIsSaved()
+    }
+
+    private fun checkIpAddressIsSaved() {
+        if(DataStoreManager(requireContext()).settingsIPAddressFlow.toString().isNotEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                Log.e("SettingsFragment", "http://"+ DataStoreManager(requireContext()).settingsIPAddressFlow.first().toString()+"/api/")
+                Common.GLOBAL_IP_ADDRESS = "http://"+ DataStoreManager(requireContext()).settingsIPAddressFlow.first().toString()+"/api/"
+            }
+        }
     }
 
 

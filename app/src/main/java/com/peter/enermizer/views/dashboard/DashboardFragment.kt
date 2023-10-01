@@ -9,8 +9,16 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentDashboardBinding
+import com.peter.enermizer.utils.Common
+import com.peter.enermizer.utils.DataStoreManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class DashboardFragment : Fragment() {
 
@@ -18,6 +26,8 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var dashboardViewModel: DashboardViewModel
     private var TAG = "DashboardFragment"
+    private val relay1Number = 4
+    private val relay2Number = 5
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +38,6 @@ class DashboardFragment : Fragment() {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         initialize()
         controllerListeners()
         listenForErrors()
@@ -38,19 +47,19 @@ class DashboardFragment : Fragment() {
     private fun controllerListeners() {
         //TODO check whether ip address and relay power are configured in settings
         binding.btnOn1.setOnClickListener {
-            relayController(1, 1) // TURN ON RELAY 1
+            relayController(relay1Number, 1) // TURN ON RELAY 1
         }
 
         binding.btnOff1.setOnClickListener {
-            relayController(1, 0) // TURN OFF RELAY 1
+            relayController(relay1Number, 0) // TURN OFF RELAY 1
         }
 
         binding.btnOn2.setOnClickListener {
-            relayController(2, 1) // TURN ON RELAY 2
+            relayController(relay2Number, 1) // TURN ON RELAY 2
         }
 
         binding.btnOff2.setOnClickListener {
-            relayController(2, 0) // TURN OFF RELAY 2
+            relayController(relay2Number, 0) // TURN OFF RELAY 2
         }
 
     }
@@ -60,8 +69,11 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateRelayStatus() {
-        dashboardViewModel.checkRelayController(1)
-        dashboardViewModel.checkRelayController(2)
+        if(Common.GLOBAL_IP_ADDRESS.isEmpty()) {
+            return
+        }
+        dashboardViewModel.checkRelayController(relay1Number)
+        dashboardViewModel.checkRelayController(relay2Number)
         changeRelayStatus()
     }
 

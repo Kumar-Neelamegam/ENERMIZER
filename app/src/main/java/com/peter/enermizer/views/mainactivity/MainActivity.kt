@@ -13,8 +13,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.ActivityMainBinding
+import com.peter.enermizer.utils.Common
 import com.peter.enermizer.utils.ConnectionType
+import com.peter.enermizer.utils.DataStoreManager
 import com.peter.enermizer.utils.NetworkMonitorUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,7 +52,19 @@ class MainActivity : AppCompatActivity() {
          * Check whether internet is up and running
          */
         checkInternetAndRelay()
+        checkIpAddressIsSaved()
+        /**
+         * Check whether settings is saved
+         */
+        if(Common.GLOBAL_IP_ADDRESS.isEmpty()) {
+            navView.selectedItemId = R.id.navigation_settings
+        } else {
+            raspberryConnectivity()
+        }
 
+    }
+
+    private fun raspberryConnectivity() {
         /**
          * Check whether raspberry pi is up and running
          */
@@ -134,6 +152,15 @@ class MainActivity : AppCompatActivity() {
                 )
             )
             binding.internetStatus.setColorFilter(ContextCompat.getColor(this, R.color.Red))
+        }
+    }
+
+    private fun checkIpAddressIsSaved() {
+        if(DataStoreManager(this).settingsIPAddressFlow.toString().isNotEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                Log.e("MainActivity", "http://"+ DataStoreManager(applicationContext).settingsIPAddressFlow.first().toString()+"/api/")
+                Common.GLOBAL_IP_ADDRESS = "http://"+ DataStoreManager(applicationContext).settingsIPAddressFlow.first().toString()+"/api/"
+            }
         }
     }
 

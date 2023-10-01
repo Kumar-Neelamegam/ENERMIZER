@@ -9,6 +9,7 @@ import com.peter.enermizer.data.ErrorObject
 import com.peter.enermizer.data.ReportDataObject
 import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.services.RetrofitInstance
+import com.peter.enermizer.utils.Common
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +35,7 @@ class ReportsViewModel : ViewModel() {
                     }
                     """
         val dateObject = Gson().fromJson(json, ReportDataObject::class.java)
-        RetrofitInstance.apiInstance.getCombinedReports(dateObject)
+        RetrofitInstance(Common.GLOBAL_IP_ADDRESS!!).apiInstance.getCombinedReports(dateObject)
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
