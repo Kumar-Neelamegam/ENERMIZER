@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -14,13 +13,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.ActivityMainBinding
-import com.peter.enermizer.utils.Common
 import com.peter.enermizer.utils.ConnectionType
 import com.peter.enermizer.utils.DataStoreManager
 import com.peter.enermizer.utils.NetworkMonitorUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -61,9 +58,9 @@ class MainActivity : AppCompatActivity() {
          */
         CoroutineScope(Dispatchers.Main).launch {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-            if(storedIpAddress?.isNotEmpty() == true) {
+            if (storedIpAddress?.isNotEmpty() == true) {
                 raspberryConnectivity(storedIpAddress.toString())
-            }else {
+            } else {
                 navView.selectedItemId = R.id.navigation_settings
             }
         }

@@ -1,19 +1,15 @@
 package com.peter.enermizer.views.settings
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.peter.enermizer.data.ErrorObject
 import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.data.RelaySettingsDataObject
 import com.peter.enermizer.services.RetrofitInstance
 import com.peter.enermizer.utils.Common
-import com.peter.enermizer.utils.DataStoreManager
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

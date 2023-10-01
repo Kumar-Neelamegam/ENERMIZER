@@ -39,7 +39,8 @@ class ReportsViewModel : ViewModel() {
                     if (response.body() != null) {
                         raspberryPiResponse.value = response.body()!!
                     } else {
-                        _errorStatus.value = ErrorObject("Failed to retrieve reports! Try later", true)
+                        _errorStatus.value =
+                            ErrorObject("Failed to retrieve reports! Try later", true)
                         return
                     }
                 }

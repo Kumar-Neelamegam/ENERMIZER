@@ -38,22 +38,23 @@ class MainActivityViewModel : ViewModel() {
 
     private fun checkRaspBerryPiStatus(ipaddress: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getAPIStatus().enqueue(object :
-                Callback<RaspberryPiResponseDataset> {
-                override fun onResponse(
-                    call: Call<RaspberryPiResponseDataset>,
-                    response: Response<RaspberryPiResponseDataset>
-                ) {
-                    if (response.body() != null) {
-                        raspberryPi.value = response.body()!!.status
+            RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getAPIStatus()
+                .enqueue(object :
+                    Callback<RaspberryPiResponseDataset> {
+                    override fun onResponse(
+                        call: Call<RaspberryPiResponseDataset>,
+                        response: Response<RaspberryPiResponseDataset>
+                    ) {
+                        if (response.body() != null) {
+                            raspberryPi.value = response.body()!!.status
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<RaspberryPiResponseDataset>, t: Throwable) {
-                    Log.d("TAG", t.message.toString())
-                    raspberryPi.value = false
-                }
-            })
+                    override fun onFailure(call: Call<RaspberryPiResponseDataset>, t: Throwable) {
+                        Log.d("TAG", t.message.toString())
+                        raspberryPi.value = false
+                    }
+                })
         }
     }
 

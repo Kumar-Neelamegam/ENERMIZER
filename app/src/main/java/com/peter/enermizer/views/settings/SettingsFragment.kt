@@ -65,21 +65,21 @@ class SettingsFragment : Fragment() {
 
         CoroutineScope(Dispatchers.Main).launch {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-            if(storedIpAddress?.isNotEmpty() == true) {
+            if (storedIpAddress?.isNotEmpty() == true) {
                 binding.editIpaddress.setText(dataStoreManager.settingsIPAddressFlow().toString())
             }
         }
 
         CoroutineScope(Dispatchers.Main).launch {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-            if(storedIpAddress?.isNotEmpty() == true) {
+            if (storedIpAddress?.isNotEmpty() == true) {
                 binding.editRelay1Power.setText(dataStoreManager.settingsRelay1Power().toString())
             }
         }
 
         CoroutineScope(Dispatchers.Main).launch {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-            if(storedIpAddress?.isNotEmpty() == true) {
+            if (storedIpAddress?.isNotEmpty() == true) {
                 binding.editRelay2Power.setText(dataStoreManager.settingsRelay2Power().toString())
             }
         }
@@ -90,30 +90,34 @@ class SettingsFragment : Fragment() {
      * Controllisteners for the UI components
      */
     private fun controllisteners() {
-            binding.saveButton.setOnClickListener {
-                if(binding.editIpaddress.text.isNullOrEmpty()) {
-                    showErrorDialog("Enter the IP address with port")
-                    return@setOnClickListener
-                }
-                if(binding.editRelay1Power.text.isNullOrEmpty()) {
-                    showErrorDialog("Enter the relay 1 power in kWh")
-                    return@setOnClickListener
-                }
-                if(binding.editRelay2Power.text.isNullOrEmpty()) {
-                    showErrorDialog("Enter the relay 1 power in kWh")
-                    return@setOnClickListener
-                }
-
-                val ipaddress = binding.editIpaddress.text.toString()
-                val relay1Power = Integer.parseInt(binding.editRelay1Power.text.toString())
-                val relay2Power = Integer.parseInt(binding.editRelay2Power.text.toString())
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    DataStoreManager(requireContext()).storeSettingsInfo(ipaddress, relay1Power, relay2Power)
-                }
-                showSuccessDialog("Saved successfully..")
-
+        binding.saveButton.setOnClickListener {
+            if (binding.editIpaddress.text.isNullOrEmpty()) {
+                showErrorDialog("Enter the IP address with port")
+                return@setOnClickListener
             }
+            if (binding.editRelay1Power.text.isNullOrEmpty()) {
+                showErrorDialog("Enter the relay 1 power in kWh")
+                return@setOnClickListener
+            }
+            if (binding.editRelay2Power.text.isNullOrEmpty()) {
+                showErrorDialog("Enter the relay 1 power in kWh")
+                return@setOnClickListener
+            }
+
+            val ipaddress = binding.editIpaddress.text.toString()
+            val relay1Power = Integer.parseInt(binding.editRelay1Power.text.toString())
+            val relay2Power = Integer.parseInt(binding.editRelay2Power.text.toString())
+
+            CoroutineScope(Dispatchers.IO).launch {
+                DataStoreManager(requireContext()).storeSettingsInfo(
+                    ipaddress,
+                    relay1Power,
+                    relay2Power
+                )
+            }
+            showSuccessDialog("Saved successfully..")
+
+        }
 
         binding.editRelay2Power.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -126,21 +130,25 @@ class SettingsFragment : Fragment() {
 
     }
 
-    private fun showErrorDialog(message:String) {
+    private fun showErrorDialog(message: String) {
         SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
             .setTitleText("Error")
             .setContentText(message)
             .show()
     }
 
-    private fun showSuccessDialog(message:String) {
+    private fun showSuccessDialog(message: String) {
         SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE)
             .setTitleText("Success")
             .setContentText(message)
             .show()
         // TODO save the settings to the server
         CoroutineScope(Dispatchers.IO).launch {
-            settingsViewModel.postRelaySettings(binding.editIpaddress.text.toString(), binding.editRelay1Power.text.toString(), binding.editRelay2Power.text.toString())
+            settingsViewModel.postRelaySettings(
+                binding.editIpaddress.text.toString(),
+                binding.editRelay1Power.text.toString(),
+                binding.editRelay2Power.text.toString()
+            )
         }
     }
 

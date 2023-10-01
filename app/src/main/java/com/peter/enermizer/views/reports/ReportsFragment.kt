@@ -2,8 +2,6 @@ package com.peter.enermizer.views.reports
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +36,7 @@ class ReportsFragment : Fragment() {
     private val dataStoreManager: DataStoreManager by lazy {
         DataStoreManager(requireContext())
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +59,7 @@ class ReportsFragment : Fragment() {
         reportsViewModel.errorStatus.observeForever {
             if (it.status) {
                 Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                if(customProgressDialog.isShowing) customProgressDialog.dismiss()
+                if (customProgressDialog.isShowing) customProgressDialog.dismiss()
             }
         }
     }
@@ -104,11 +103,16 @@ class ReportsFragment : Fragment() {
             val selectedDateRange = "$startDateString - $endDateString"
 
             // Displaying the selected date range in the TextView
-            binding.selectedDate.text = resources.getString(R.string.label_selected_date_range, selectedDateRange)
+            binding.selectedDate.text =
+                resources.getString(R.string.label_selected_date_range, selectedDateRange)
             CoroutineScope(Dispatchers.IO).launch {
                 val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-                if(storedIpAddress?.isNotEmpty() == true) {
-                    reportsViewModel.getReportsBasedOnDates(storedIpAddress.toString(), startDateString, endDateString)
+                if (storedIpAddress?.isNotEmpty() == true) {
+                    reportsViewModel.getReportsBasedOnDates(
+                        storedIpAddress.toString(),
+                        startDateString,
+                        endDateString
+                    )
                 }
             }
 
@@ -153,7 +157,7 @@ class ReportsFragment : Fragment() {
     fun checkNan(reportValue: String): Any {
         val decimalFormat = DecimalFormat("#.####")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
-        return if(reportValue == "nan") {
+        return if (reportValue == "nan") {
             0.0
         } else {
             decimalFormat.format(reportValue.toDouble())
@@ -177,13 +181,13 @@ class ReportsFragment : Fragment() {
 
         // Show the custom progress dialog
         customProgressDialog.show()
-/*
+        /*
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            // Dismiss the custom progress dialog when loading is done
-            customProgressDialog.dismiss()
-        }, 15000)
-*/
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the custom progress dialog when loading is done
+                    customProgressDialog.dismiss()
+                }, 15000)
+        */
 
     }
 

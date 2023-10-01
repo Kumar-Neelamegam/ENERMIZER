@@ -31,7 +31,7 @@ class DashboardViewModel : ViewModel() {
      * RELAY OFF = RED
      * RELAY AUTO = YELLOW
      */
-    fun liveCheckRelayControllers(ipaddress: String, relay1Number:Int, relay2Number: Int) {
+    fun liveCheckRelayControllers(ipaddress: String, relay1Number: Int, relay2Number: Int) {
         job = viewModelScope.launch {
             while (true) {
                 checkRelayController(ipaddress, relay1Number)
@@ -42,9 +42,13 @@ class DashboardViewModel : ViewModel() {
 
         }
     }
+
     fun callRelayController(ipaddress: String, relayNumber: Int, relayStatus: Int) {
 
-        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.postRelayController(relayNumber, relayStatus)
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.postRelayController(
+            relayNumber,
+            relayStatus
+        )
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
@@ -69,7 +73,9 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun checkRelayController(ipaddress: String, relayNumber: Int) {
-        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getRelayController(relayNumber)
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getRelayController(
+            relayNumber
+        )
             .enqueue(object : Callback<RaspberryPiResponseDataset> {
                 override fun onResponse(
                     call: Call<RaspberryPiResponseDataset>,
@@ -77,7 +83,8 @@ class DashboardViewModel : ViewModel() {
                 ) {
                     if (response.body() != null) {
                         relayStatus.value = RaspberryPiRelayDataset(
-                            response.body()!!.status, "", "" , relay = relayNumber)
+                            response.body()!!.status, "", "", relay = relayNumber
+                        )
                     } else {
                         return
                     }

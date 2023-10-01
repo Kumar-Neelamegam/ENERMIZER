@@ -5,19 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentDashboardBinding
-import com.peter.enermizer.utils.Common
 import com.peter.enermizer.utils.DataStoreManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class DashboardFragment : Fragment() {
@@ -32,6 +27,7 @@ class DashboardFragment : Fragment() {
     private val dataStoreManager: DataStoreManager by lazy {
         DataStoreManager(requireContext())
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,7 +76,7 @@ class DashboardFragment : Fragment() {
     private fun updateRelayStatus() {
         CoroutineScope(Dispatchers.Main).launch {
             val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
-            if(storedIpAddress?.isNotEmpty() == true) {
+            if (storedIpAddress?.isNotEmpty() == true) {
                 ipaddress = storedIpAddress.toString()
                 dashboardViewModel.liveCheckRelayControllers(ipaddress, relay1Number, relay2Number)
                 changeRelayStatus()
