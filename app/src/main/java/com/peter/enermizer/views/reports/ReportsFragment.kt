@@ -105,7 +105,7 @@ class ReportsFragment : Fragment() {
 
             // Displaying the selected date range in the TextView
             binding.selectedDate.text = resources.getString(R.string.label_selected_date_range, selectedDateRange)
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
                 if(storedIpAddress?.isNotEmpty() == true) {
                     reportsViewModel.getReportsBasedOnDates(storedIpAddress.toString(), startDateString, endDateString)

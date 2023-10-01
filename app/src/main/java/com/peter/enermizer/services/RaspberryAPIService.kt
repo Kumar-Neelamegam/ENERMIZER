@@ -1,6 +1,7 @@
 package com.peter.enermizer.services
 
 import com.peter.enermizer.data.RaspberryPiResponseDataset
+import com.peter.enermizer.data.RelaySettingsDataObject
 import com.peter.enermizer.data.ReportDataObject
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -33,6 +34,9 @@ interface RaspberryAPIService {
 
     @POST("automode/{relayNumber}")
     fun postAutoMode(@Path("relayNumber") relayNumber: Int): Call<RaspberryPiResponseDataset>
+
+    @POST("postRelaySettings")
+    fun postRelaySettings(@Body data: RelaySettingsDataObject): Call<RaspberryPiResponseDataset>
 
 }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -20,6 +21,8 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var settingsViewModel: SettingsViewModel
+
     private val dataStoreManager: DataStoreManager by lazy {
         DataStoreManager(requireContext())
     }
@@ -30,7 +33,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val settingsViewModel =
+        settingsViewModel =
             ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
@@ -38,7 +41,17 @@ class SettingsFragment : Fragment() {
 
         init()
         controllisteners()
+        listenForErrors()
         return root
+    }
+
+    private fun listenForErrors() {
+
+        settingsViewModel.errorStatus.observeForever {
+            if (it.status) {
+                Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     /**
@@ -126,7 +139,9 @@ class SettingsFragment : Fragment() {
             .setContentText(message)
             .show()
         // TODO save the settings to the server
-
+        CoroutineScope(Dispatchers.IO).launch {
+            settingsViewModel.postRelaySettings(binding.editIpaddress.text.toString(), binding.editRelay1Power.text.toString(), binding.editRelay2Power.text.toString())
+        }
     }
 
     override fun onDestroyView() {
