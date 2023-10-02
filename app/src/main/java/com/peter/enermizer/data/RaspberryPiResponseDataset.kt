@@ -4,4 +4,5 @@ data class RaspberryPiResponseDataset(
     val status: Boolean?,
     val error: String?,
     val message: String?,
+    val relaystatus: String?
 )

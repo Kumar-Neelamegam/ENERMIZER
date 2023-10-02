@@ -5,4 +5,5 @@ data class RaspberryPiRelayDataset(
     val error: String?,
     val message: String?,
     val relay: Int?,
+    val relaystatus: String?
 )

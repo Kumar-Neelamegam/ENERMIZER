@@ -83,7 +83,7 @@ class DashboardViewModel : ViewModel() {
                 ) {
                     if (response.body() != null) {
                         relayStatus.value = RaspberryPiRelayDataset(
-                            response.body()!!.status, "", "", relay = relayNumber
+                            response.body()!!.status, "", "", relay = relayNumber, relaystatus =  response.body()!!.relaystatus
                         )
                     } else {
                         return

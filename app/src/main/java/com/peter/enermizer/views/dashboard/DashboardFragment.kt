@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +45,12 @@ class DashboardFragment : Fragment() {
     }
 
     private fun controllerListeners() {
+        /**
+         * Definition for Relay mode
+         * ON MODE = 1 = RELAY STATUS
+         * OFF MODE = 0 = RELAY STATUS
+         * AUTO MODE = 2 = RELAY STATUS
+         */
         binding.btnOn1.setOnClickListener {
             relayController(relay1Number, 1) // TURN ON RELAY 1
         }
@@ -61,11 +68,11 @@ class DashboardFragment : Fragment() {
         }
 
         binding.btnRelay1Auto.setOnClickListener {
-
+            relayController(relay1Number, 2) // TURN AUTO RELAY 1
         }
 
         binding.btnRelay2Auto.setOnClickListener {
-
+            relayController(relay2Number, 2) // TURN AUTO RELAY 2
         }
     }
 
@@ -89,34 +96,48 @@ class DashboardFragment : Fragment() {
             Log.e(TAG, "Response --> Relay Status")
             Log.e(TAG, response.toString())
             if (response.relay == relay1Number) {
-                if (response.status == true) {
+                if (response.relaystatus == "True") {
                     binding.imgvwRelay1.setColorFilter(
                         ContextCompat.getColor(
                             requireActivity(),
                             R.color.Green
                         )
                     )
-                } else {
+                } else if(response.relaystatus == "False") {
                     binding.imgvwRelay1.setColorFilter(
                         ContextCompat.getColor(
                             requireActivity(),
                             R.color.Red
+                        )
+                    )
+                } else  if(response.relaystatus == "Auto"){
+                    binding.imgvwRelay1.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity(),
+                            R.color.Orange
                         )
                     )
                 }
             } else if (response.relay == relay2Number) {
-                if (response.status == true) {
+                if (response.relaystatus == "True") {
                     binding.imgvwRelay2.setColorFilter(
                         ContextCompat.getColor(
                             requireActivity(),
                             R.color.Green
                         )
                     )
-                } else {
+                } else if(response.relaystatus == "False") {
                     binding.imgvwRelay2.setColorFilter(
                         ContextCompat.getColor(
                             requireActivity(),
                             R.color.Red
+                        )
+                    )
+                } else if(response.relaystatus == "Auto") {
+                    binding.imgvwRelay2.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity(),
+                            R.color.Orange
                         )
                     )
                 }
@@ -147,7 +168,7 @@ class DashboardFragment : Fragment() {
                 Log.e(TAG, response.toString())
                 updateRelayStatus()
                 if (response.status == true) {
-
+                    Toast.makeText(activity, "Updated the relay status...", Toast.LENGTH_LONG).show()
                 }
             }
     }

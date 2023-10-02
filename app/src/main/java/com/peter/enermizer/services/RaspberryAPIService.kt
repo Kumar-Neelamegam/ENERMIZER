@@ -32,9 +32,6 @@ interface RaspberryAPIService {
     @POST("getAllReports")
     fun getCombinedReports(@Body data: ReportDataObject): Call<RaspberryPiResponseDataset>
 
-    @POST("automode/{relayNumber}")
-    fun postAutoMode(@Path("relayNumber") relayNumber: Int): Call<RaspberryPiResponseDataset>
-
     @POST("postRelaySettings")
     fun postRelaySettings(@Body data: RelaySettingsDataObject): Call<RaspberryPiResponseDataset>
 
