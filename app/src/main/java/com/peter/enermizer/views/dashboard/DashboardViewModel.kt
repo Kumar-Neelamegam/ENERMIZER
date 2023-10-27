@@ -44,6 +44,7 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun callRelayController(ipaddress: String, relayNumber: Int, relayStatus: Int) {
+        Log.e("DASHBOARD", "$ipaddress-$relayNumber-$relayStatus")
 
         RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.postRelayController(
             relayNumber,

@@ -33,11 +33,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_10"
-                android:digits="0123456789.:"
+                android:digits="0123456789:."
                 android:ems="10"
                 android:hint="@string/label_settings_ipaddress_hint"
                 android:imeOptions="actionNext"
-                android:inputType="number" />
+                android:inputType="number|time" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>

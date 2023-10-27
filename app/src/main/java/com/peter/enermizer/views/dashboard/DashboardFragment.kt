@@ -96,50 +96,58 @@ class DashboardFragment : Fragment() {
             Log.e(TAG, "Response --> Relay Status")
             Log.e(TAG, response.toString())
             if (response.relay == relay1Number) {
-                if (response.relaystatus == "True") {
-                    binding.imgvwRelay1.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Green
+                when (response.relaystatus) {
+                    "True" -> {
+                        binding.imgvwRelay1.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Green
+                            )
                         )
-                    )
-                } else if(response.relaystatus == "False") {
-                    binding.imgvwRelay1.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Red
+                    }
+                    "False" -> {
+                        binding.imgvwRelay1.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Red
+                            )
                         )
-                    )
-                } else  if(response.relaystatus == "Auto"){
-                    binding.imgvwRelay1.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Orange
+                    }
+                    "Auto" -> {
+                        binding.imgvwRelay1.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Orange
+                            )
                         )
-                    )
+                    }
                 }
             } else if (response.relay == relay2Number) {
-                if (response.relaystatus == "True") {
-                    binding.imgvwRelay2.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Green
+                when (response.relaystatus) {
+                    "True" -> {
+                        binding.imgvwRelay2.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Green
+                            )
                         )
-                    )
-                } else if(response.relaystatus == "False") {
-                    binding.imgvwRelay2.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Red
+                    }
+                    "False" -> {
+                        binding.imgvwRelay2.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Red
+                            )
                         )
-                    )
-                } else if(response.relaystatus == "Auto") {
-                    binding.imgvwRelay2.setColorFilter(
-                        ContextCompat.getColor(
-                            requireActivity(),
-                            R.color.Orange
+                    }
+                    "Auto" -> {
+                        binding.imgvwRelay2.setColorFilter(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.Orange
+                            )
                         )
-                    )
+                    }
                 }
             }
 
