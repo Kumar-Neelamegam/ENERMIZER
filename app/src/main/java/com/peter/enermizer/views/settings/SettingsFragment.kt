@@ -47,7 +47,7 @@ class SettingsFragment : Fragment() {
 
     private fun listenForErrors() {
 
-        settingsViewModel.errorStatus.observeForever {
+        settingsViewModel.errorStatus.observe(viewLifecycleOwner)  {
             if (it.status) {
                 Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
             }
