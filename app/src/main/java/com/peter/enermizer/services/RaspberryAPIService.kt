@@ -4,6 +4,7 @@ import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.data.RelaySettingsDataObject
 import com.peter.enermizer.data.ReportDataObject
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,6 +36,8 @@ interface RaspberryAPIService {
     @POST("postRelaySettings")
     fun postRelaySettings(@Body data: RelaySettingsDataObject): Call<RaspberryPiResponseDataset>
 
+    @GET("liveAutoModeStatus")
+    fun getLiveAutoRelayStatus(): Call<ResponseBody>
 }
 
 class RetrofitInstance(ipaddress: String) {

@@ -42,8 +42,11 @@
     <string name="report5">Savings (€)</string>
     <string name="report5_subtitle">Costs of energy consumed minus Sum of all hourly Energy consumed x Average Awattar price</string>
 
+    <string name="label_show_reports">Show summary based on selected dates</string>
+    <string name="label_show_auto_relay">Show auto relay status</string>
     <string name="label_selected_date_range">Selected Date: %1$S</string>
     <string name="label_select_date">Select Date</string>
+    <string name="label_auto_relay">Auto Relay Status</string>
 
     <!-- Settings -->
     <string name="label_settings_ipaddress">Enter the IP Address</string>

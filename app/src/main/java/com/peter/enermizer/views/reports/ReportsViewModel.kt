@@ -10,9 +10,14 @@ import com.peter.enermizer.data.RaspberryPiResponseDataset
 import com.peter.enermizer.data.ReportDataObject
 import com.peter.enermizer.services.RetrofitInstance
 import com.peter.enermizer.utils.Common
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.InputStream
 
 
 class ReportsViewModel : ViewModel() {
@@ -22,6 +27,8 @@ class ReportsViewModel : ViewModel() {
        }
        val text: LiveData<String> = _text*/
     private var raspberryPiResponse = MutableLiveData<RaspberryPiResponseDataset>()
+    var raspberryPiAutoRelayResponse = MutableLiveData<ResponseBody>()
+
     private var _errorStatus: MutableLiveData<ErrorObject> = MutableLiveData<ErrorObject>()
     val errorStatus = _errorStatus
 
@@ -53,9 +60,39 @@ class ReportsViewModel : ViewModel() {
 
     }
 
+    fun getAutoRelayStatus(ipaddress: String) {
+        RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getLiveAutoRelayStatus()
+            .enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    responseBody?.let {
+                        raspberryPiAutoRelayResponse.value = it
+                    }
+                } else {
+                    _errorStatus.value =
+                        ErrorObject("Failed to retrieve reports! Try later", true)
+                    return
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                t.printStackTrace()
+                Log.e("TAG", t.message.toString())
+                _errorStatus.value = ErrorObject("Failed to retrieve reports! Try later", true)
+            }
+        })
+    }
+
+
     fun observeResponseLiveData(): LiveData<RaspberryPiResponseDataset> {
         return raspberryPiResponse
     }
+
+    fun observeResponseLiveData2(): LiveData<ResponseBody> {
+        return raspberryPiAutoRelayResponse
+    }
+
 
 
 }

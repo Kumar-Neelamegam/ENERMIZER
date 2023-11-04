@@ -1,29 +1,48 @@
 package com.peter.enermizer.views.reports
 
 import android.app.Dialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.peter.enermizer.R
 import com.peter.enermizer.databinding.FragmentReportsBinding
 import com.peter.enermizer.utils.DataStoreManager
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.InputStream
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+import com.squareup.picasso.Target
 
 class ReportsFragment : Fragment() {
 
@@ -68,8 +87,36 @@ class ReportsFragment : Fragment() {
      * Initialization of the views
      */
     private fun init() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+            if (storedIpAddress?.isNotEmpty() == true) {
 
+                val text = "Follow the link on browser $storedIpAddress/api/liveAutoModeStatus or click below to see 'Auto relay' status"
 
+                val spannableString = SpannableString(text)
+
+                // Create a clickable link
+                val clickableLink = object : ClickableSpan() {
+                    override fun onClick(view: View) {
+                        // Handle the click action, e.g., open a web page
+                        // You can use an Intent to open a web browser with the URL.
+                        val url = "http://$storedIpAddress/api/liveAutoModeStatus"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                    }
+                }
+
+                // Set the clickable link for the specified portion of text
+                spannableString.setSpan(clickableLink, text.indexOf(storedIpAddress), text.indexOf("or "), 0)
+
+                // Set the SpannableString to the TextView
+                binding.autorelayInstruction.text = spannableString
+
+                // Make sure the TextView is clickable and recognizes links
+                binding.autorelayInstruction.movementMethod = LinkMovementMethod.getInstance()
+
+            }
+        }
     }
 
     /**
@@ -78,6 +125,37 @@ class ReportsFragment : Fragment() {
     private fun controllisteners() {
         binding.datePicker.setOnClickListener {
             datePickerDialog()
+        }
+
+        binding.autoRelay.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val storedIpAddress = dataStoreManager.settingsIPAddressFlow()
+                if (storedIpAddress?.isNotEmpty() == true) {
+                    reportsViewModel.getAutoRelayStatus(storedIpAddress)
+                }
+            }
+
+            //Show progress
+            val title = "Please wait"
+            val message = "Fetching auto mode - relay status..."
+            showProgress(title, message)
+
+            reportsViewModel.observeResponseLiveData2().observe(viewLifecycleOwner) { response ->
+                //Hide progress
+                customProgressDialog.dismiss()
+                showPopupWithImage(response.byteStream())
+            }
+        }
+    }
+
+    private fun showPopupWithImage(inputStream: InputStream) {
+        activity?.runOnUiThread {
+            // Create a Bitmap from the InputStream and set it to the ImageView
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            if(bitmap!=null) {
+                val customPopupDialog = CustomPopupDialogFragment(bitmap)
+                customPopupDialog.show(childFragmentManager, "relay")
+            }
         }
     }
 
@@ -117,7 +195,10 @@ class ReportsFragment : Fragment() {
             }
 
             //Show progress
-            showProgress(binding.selectedDate.text.toString())
+            val title = "Please wait"
+            val message = "Fetching reports for - "+ binding.selectedDate.text.toString()
+
+            showProgress(title, message)
             updateReportsWithValues()
         }
 
@@ -164,7 +245,7 @@ class ReportsFragment : Fragment() {
         }
     }
 
-    fun showProgress(selectedDates: String) {
+    fun showProgress(title:String, message: String) {
         // Initialize the custom progress dialog
         customProgressDialog = Dialog(requireContext())
         customProgressDialog.setContentView(R.layout.custom_progress_dialog_layout)
@@ -176,8 +257,8 @@ class ReportsFragment : Fragment() {
         val progressBar = customProgressDialog.findViewById<ProgressBar>(R.id.dialogProgressBar)
 
         // Set title and text
-        dialogTitle.text = "Please wait"
-        dialogText.text = "Fetching reports for - $selectedDates"
+        dialogTitle.text = title
+        dialogText.text = message
 
         // Show the custom progress dialog
         customProgressDialog.show()
@@ -195,4 +276,5 @@ class ReportsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

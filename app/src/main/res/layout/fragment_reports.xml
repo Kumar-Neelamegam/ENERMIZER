@@ -7,6 +7,61 @@
     android:orientation="vertical"
     tools:context=".views.reports.ReportsFragment">
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:text="@string/label_show_auto_relay"
+        android:textAppearance="?textAppearanceHeadline6"
+        tools:text="@string/label_show_auto_relay" />
+
+    <TextView
+        android:id="@+id/autorelay_instruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textAppearance="?textAppearanceBody2"  />
+
+    <Button
+        android:id="@+id/autoRelay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:text="@string/label_auto_relay"
+        android:textSize="@dimen/text_size_20" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <View
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingBottom="@dimen/margin_10"/>
+
+    <TextView
+        android:text="@string/label_show_reports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textAppearance="?textAppearanceHeadline6"
+        tools:text="@string/label_show_reports" />
+
     <Button
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
@@ -19,7 +74,7 @@
 
     <TextView
         android:id="@+id/selectedDate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_5"
         android:layout_marginEnd="@dimen/margin_5"
