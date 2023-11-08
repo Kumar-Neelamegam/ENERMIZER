@@ -34,7 +34,7 @@ class ReportsViewModel : ViewModel() {
 
     fun getReportsBasedOnDates(ipaddress: String, fromDate: String, toDate: String) {
 
-        val jsonData = "{ \"fromDate\": \"$fromDate\", \"toDate\": \"$toDate\" }"
+        val jsonData = "{ \"fromDate\": \"$fromDate 00:00:00\", \"toDate\": \"$toDate 23:59:59\" }"
 
         val dateObject = Gson().fromJson(jsonData, ReportDataObject::class.java)
         RetrofitInstance(Common.buildIpaddress(ipaddress)).apiInstance.getCombinedReports(dateObject)

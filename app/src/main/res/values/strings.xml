@@ -11,7 +11,7 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="app_name">Enermizer</string>
+    <string name="app_name">Electromizer</string>
 
     <!-- Home activity strings -->
     <string name="relay_1">Relay 1</string>
